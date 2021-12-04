@@ -13,7 +13,7 @@ const signToken = (user: User): Token => {
     username: user.username,
   };
 
-  return { token: jwt.sign(payload, config.JWT_SECRET) };
+  return { token: jwt.sign(payload, config.JWT_SECRET, { expiresIn: '5m' }) };
 };
 
 const validatePassword = async (password: string, hashedPassword: string): Promise<boolean> => {
@@ -55,7 +55,16 @@ const login = async (loginInput: LoginInput): Promise<Token> => {
   return signToken(existingUser);
 };
 
+const refresh = async (user?: User): Promise<Token> => {
+  if (!user) {
+    throw new Error("User doesn't exists");
+  }
+
+  return signToken(user);
+};
+
 export default {
   register,
   login,
+  refresh,
 };
