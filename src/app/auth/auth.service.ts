@@ -1,4 +1,4 @@
-import { RegisterInput, Token } from './auth.types';
+import { LoginInput, RegisterInput, Token } from './auth.types';
 
 import userService from '../user/user.service';
 import bcrypt from 'bcrypt';
@@ -14,6 +14,10 @@ const signToken = (user: User): Token => {
   };
 
   return { token: jwt.sign(payload, config.JWT_SECRET) };
+};
+
+const validatePassword = async (password: string, hashedPassword: string): Promise<boolean> => {
+  return bcrypt.compare(password, hashedPassword);
 };
 
 const register = async (registerInput: RegisterInput): Promise<Token> => {
@@ -35,6 +39,23 @@ const register = async (registerInput: RegisterInput): Promise<Token> => {
   return signToken(user);
 };
 
+const login = async (loginInput: LoginInput): Promise<Token> => {
+  const { email, password } = loginInput;
+  const existingUser = await userService.findByEmail(email);
+
+  if (!existingUser) {
+    throw new Error('Invalid credentials');
+  }
+
+  const isUserValid = await validatePassword(password, existingUser.password);
+  if (!isUserValid) {
+    throw new Error('Invalid credentials');
+  }
+
+  return signToken(existingUser);
+};
+
 export default {
   register,
+  login,
 };
