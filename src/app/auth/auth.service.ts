@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { User } from '../user/user.types';
 import jwt from 'jsonwebtoken';
 import config from '../../config';
+import { BadRequestException, UnauthorizedException } from '../../exception';
 
 const signToken = (user: User): Token => {
   const payload = {
@@ -25,7 +26,7 @@ const register = async (registerInput: RegisterInput): Promise<Token> => {
   const existingUser = await userService.findByEmail(email);
 
   if (existingUser) {
-    throw new Error(`Cannot register with email ${email}`);
+    throw new BadRequestException(`Cannot register with email ${email}`);
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -44,12 +45,12 @@ const login = async (loginInput: LoginInput): Promise<Token> => {
   const existingUser = await userService.findByEmail(email);
 
   if (!existingUser) {
-    throw new Error('Invalid credentials');
+    throw new UnauthorizedException('Invalid credentials');
   }
 
   const isUserValid = await validatePassword(password, existingUser.password);
   if (!isUserValid) {
-    throw new Error('Invalid credentials');
+    throw new UnauthorizedException('Invalid credentials');
   }
 
   return signToken(existingUser);
@@ -57,7 +58,7 @@ const login = async (loginInput: LoginInput): Promise<Token> => {
 
 const refresh = async (user?: User): Promise<Token> => {
   if (!user) {
-    throw new Error("User doesn't exists");
+    throw new UnauthorizedException("User doesn't exists");
   }
 
   return signToken(user);
