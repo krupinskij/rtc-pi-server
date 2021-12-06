@@ -5,9 +5,12 @@ import mongoose from 'mongoose';
 import config from './config';
 import cors from 'cors';
 
+const CONNECTION_STRING = config.CONNECTION_STRING;
+const PORT = config.PORT;
+
 mongoose
-  .connect(config.CONNECTION_STRING)
-  .then(() => console.log('connection succesful'))
+  .connect(CONNECTION_STRING)
+  .then(() => console.log('Connection established succesfully'))
   .catch(err => console.error(err));
 
 const app = express();
@@ -22,6 +25,6 @@ app.use(json());
 
 app.use('/api/auth', authRouter);
 
-app.listen(3030, () => {
-  console.log(`App started on port 3030`);
+app.listen(PORT, () => {
+  console.log(`App started on port ${PORT}`);
 });
