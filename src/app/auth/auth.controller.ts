@@ -1,7 +1,8 @@
-import { LoginInput, RegisterInput, Token } from './auth.types';
+import HttpException from 'exception/http.exception';
+import { AuthRequest, Request, Response } from 'model';
+
 import authService from './auth.service';
-import { AuthRequest, Request, Response } from '../../typings/types';
-import HttpException from '../../exception/http.exception';
+import { LoginInput, RegisterInput, Token } from './auth.types';
 
 const login = async (req: Request<LoginInput>, res: Response<Token | string>) => {
   const loginInput = req.body;

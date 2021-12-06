@@ -1,11 +1,12 @@
-import { LoginInput, RegisterInput, Token } from './auth.types';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
+import config from 'config';
+import { BadRequestException, UnauthorizedException } from 'exception';
 
 import userService from '../user/user.service';
-import bcrypt from 'bcrypt';
 import { User } from '../user/user.types';
-import jwt from 'jsonwebtoken';
-import config from '../../config';
-import { BadRequestException, UnauthorizedException } from '../../exception';
+import { LoginInput, RegisterInput, Token } from './auth.types';
 
 const signToken = (user: User): Token => {
   const payload = {
