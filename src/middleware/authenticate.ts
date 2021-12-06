@@ -1,6 +1,7 @@
-import config from 'config';
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
+
+import config from 'config';
 import { AuthRequest, TokenPayload } from 'model';
 
 export const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {

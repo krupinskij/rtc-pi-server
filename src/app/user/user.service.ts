@@ -1,5 +1,5 @@
-import { User, UserToSave } from './user.types';
 import userModel from './user.model';
+import { User, UserToSave } from './user.types';
 
 const findById = async (id: string): Promise<User> => {
   return await userModel.findById(id);
