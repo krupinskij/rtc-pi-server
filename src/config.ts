@@ -4,7 +4,8 @@ dotenv.config();
 
 const config = {
   CONNECTION_STRING: process.env.CONNECTION_STRING || '',
-  JWT_SECRET: process.env.JWT_SECRET || 'default_jwt_secret',
+  ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET || 'default_access_jwt_secret',
+  REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET || 'default_refresh_jwt_secret',
   PORT: process.env.PORT || 3030,
 };
 

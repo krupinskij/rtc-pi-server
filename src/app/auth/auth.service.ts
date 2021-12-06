@@ -1,28 +1,11 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-
-import config from 'config';
 import { BadRequestException, UnauthorizedException } from 'exception';
 
 import userService from '../user/user.service';
 import { User } from '../user/user.types';
-import { LoginInput, RegisterInput, Token } from './auth.types';
+import { LoginInput, RegisterInput, Tokens } from './auth.types';
+import { generateHash, signAccessToken, signRefreshToken, validatePassword } from './utils';
 
-const signToken = (user: User): Token => {
-  const payload = {
-    _id: user._id,
-    email: user.email,
-    username: user.username,
-  };
-
-  return { token: jwt.sign(payload, config.JWT_SECRET, { expiresIn: '5m' }) };
-};
-
-const validatePassword = async (password: string, hashedPassword: string): Promise<boolean> => {
-  return bcrypt.compare(password, hashedPassword);
-};
-
-const register = async (registerInput: RegisterInput): Promise<Token> => {
+const register = async (registerInput: RegisterInput): Promise<Tokens> => {
   const { email, password } = registerInput;
   const existingUser = await userService.findByEmail(email);
 
@@ -30,18 +13,21 @@ const register = async (registerInput: RegisterInput): Promise<Token> => {
     throw new BadRequestException(`Cannot register with email ${email}`);
   }
 
-  const salt = await bcrypt.genSalt(10);
-  const hashedPassword = await bcrypt.hash(password, salt);
+  const hashedPassword = await generateHash(password);
 
   const user = await userService.createUser({
     ...registerInput,
     password: hashedPassword,
   });
 
-  return signToken(user);
+  return {
+    accessToken: signAccessToken(user),
+    refreshToken: signRefreshToken(user),
+    csrfToken: await generateHash(user._id, 1),
+  };
 };
 
-const login = async (loginInput: LoginInput): Promise<Token> => {
+const login = async (loginInput: LoginInput): Promise<Tokens> => {
   const { email, password } = loginInput;
   const existingUser = await userService.findByEmail(email);
 
@@ -54,15 +40,23 @@ const login = async (loginInput: LoginInput): Promise<Token> => {
     throw new UnauthorizedException('Invalid credentials');
   }
 
-  return signToken(existingUser);
+  return {
+    accessToken: signAccessToken(existingUser),
+    refreshToken: signRefreshToken(existingUser),
+    csrfToken: await generateHash(existingUser._id, 1),
+  };
 };
 
-const refresh = async (user?: User): Promise<Token> => {
+const refresh = async (user?: User): Promise<Tokens> => {
   if (!user) {
     throw new UnauthorizedException("User doesn't exists");
   }
 
-  return signToken(user);
+  return {
+    accessToken: signAccessToken(user),
+    refreshToken: signRefreshToken(user),
+    csrfToken: await generateHash(user._id, 1),
+  };
 };
 
 export default {
