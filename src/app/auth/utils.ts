@@ -21,14 +21,12 @@ export const signRefreshToken = (user: User): string => {
   return jwt.sign(payload, config.REFRESH_TOKEN_SECRET, { expiresIn: '1h' });
 };
 
-export const validatePassword = async (
-  password: string,
-  hashedPassword: string
-): Promise<boolean> => {
-  return bcrypt.compare(password, hashedPassword);
+export const validateHash = async (data: string, hashedData: string): Promise<boolean> => {
+  return bcrypt.compare(data, hashedData);
 };
 
 export const generateHash = async (data: string, saltRound: number = 10): Promise<string> => {
+  console.log(data);
   const salt = await bcrypt.genSalt(saltRound);
   const hashedData = await bcrypt.hash(data, salt);
 

@@ -3,7 +3,7 @@ import { BadRequestException, UnauthorizedException } from 'exception';
 import userService from '../user/user.service';
 import { User } from '../user/user.types';
 import { LoginInput, RegisterInput, Tokens } from './auth.types';
-import { generateHash, signAccessToken, signRefreshToken, validatePassword } from './utils';
+import { generateHash, signAccessToken, signRefreshToken, validateHash } from './utils';
 
 const register = async (registerInput: RegisterInput): Promise<Tokens> => {
   const { email, password } = registerInput;
@@ -13,7 +13,7 @@ const register = async (registerInput: RegisterInput): Promise<Tokens> => {
     throw new BadRequestException(`Cannot register with email ${email}`);
   }
 
-  const hashedPassword = await generateHash(password);
+  const hashedPassword = await generateHash(password, 10);
 
   const user = await userService.createUser({
     ...registerInput,
@@ -23,7 +23,7 @@ const register = async (registerInput: RegisterInput): Promise<Tokens> => {
   return {
     accessToken: signAccessToken(user),
     refreshToken: signRefreshToken(user),
-    csrfToken: await generateHash(user._id, 1),
+    csrfToken: await generateHash(user._id.toString(), 1),
   };
 };
 
@@ -35,7 +35,7 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
     throw new UnauthorizedException('Invalid credentials');
   }
 
-  const isUserValid = await validatePassword(password, existingUser.password);
+  const isUserValid = await validateHash(password, existingUser.password);
   if (!isUserValid) {
     throw new UnauthorizedException('Invalid credentials');
   }
@@ -43,7 +43,7 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   return {
     accessToken: signAccessToken(existingUser),
     refreshToken: signRefreshToken(existingUser),
-    csrfToken: await generateHash(existingUser._id, 1),
+    csrfToken: await generateHash(existingUser._id.toString(), 1),
   };
 };
 
@@ -55,7 +55,7 @@ const refresh = async (user?: User): Promise<Tokens> => {
   return {
     accessToken: signAccessToken(user),
     refreshToken: signRefreshToken(user),
-    csrfToken: await generateHash(user._id, 1),
+    csrfToken: await generateHash(user._id.toString(), 1),
   };
 };
 
