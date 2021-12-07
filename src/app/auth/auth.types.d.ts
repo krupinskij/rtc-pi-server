@@ -9,6 +9,11 @@ export type LoginInput = {
   password: string;
 };
 
-export type Token = {
-  token: string;
+export type HeaderTokens = {
+  accessToken: string;
+  csrfToken: string;
+};
+
+export type Tokens = HeaderTokens & {
+  refreshToken: string;
 };

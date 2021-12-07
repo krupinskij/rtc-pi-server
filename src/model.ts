@@ -5,7 +5,11 @@ import qs from 'qs';
 
 import { User } from 'app/user/user.types';
 
-export interface TokenPayload extends User, jwt.JwtPayload {}
+export interface AccessTokenPayload extends User, jwt.JwtPayload {}
+
+export interface RefreshTokenPayload extends jwt.JwtPayload {
+  _id: string;
+}
 
 export interface Request<ReqBody = any, ReqParams = core.ParamsDictionary>
   extends ExpressRequest<ReqParams, any, ReqBody, qs.ParsedQs, Record<string, any>> {}
