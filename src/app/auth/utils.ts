@@ -26,7 +26,6 @@ export const validateHash = async (data: string, hashedData: string): Promise<bo
 };
 
 export const generateHash = async (data: string, saltRound: number = 10): Promise<string> => {
-  console.log(data);
   const salt = await bcrypt.genSalt(saltRound);
   const hashedData = await bcrypt.hash(data, salt);
 
