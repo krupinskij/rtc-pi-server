@@ -16,7 +16,7 @@ export interface Request<ReqBody = any, ReqParams = core.ParamsDictionary>
 
 export interface AuthRequest<ReqBody = any, ReqParams = core.ParamsDictionary>
   extends Request<ReqBody, ReqParams> {
-  user?: User;
+  user?: User | null;
 }
 
 export interface Response<ResBody = any> extends ExpressResponse<ResBody, Record<string, any>> {}

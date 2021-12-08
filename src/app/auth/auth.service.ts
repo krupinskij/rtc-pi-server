@@ -3,7 +3,7 @@ import { BadRequestException, UnauthorizedException } from 'exception';
 import userService from '../user/user.service';
 import { User } from '../user/user.types';
 import { LoginInput, RegisterInput, Tokens } from './auth.types';
-import { generateHash, signAccessToken, signRefreshToken, validateHash } from './utils';
+import { generateHash, signAccessToken, signRefreshToken, validateHash } from 'utils';
 
 const register = async (registerInput: RegisterInput): Promise<Tokens> => {
   const { email, password } = registerInput;
@@ -47,7 +47,7 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   };
 };
 
-const refresh = async (user?: User): Promise<Tokens> => {
+const refresh = async (user?: User | null): Promise<Tokens> => {
   if (!user) {
     throw new UnauthorizedException("User doesn't exists");
   }

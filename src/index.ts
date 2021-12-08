@@ -5,6 +5,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 
 import authRouter from './app/auth/_routes';
+import cameraRouter from './app/camera/camera.routes';
+import userRouter from './app/user/user.routes';
 import config from './config';
 
 const CONNECTION_STRING = config.CONNECTION_STRING;
@@ -28,6 +30,8 @@ app.use(
 );
 
 app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
+app.use('/api/camera', cameraRouter);
 
 app.listen(PORT, () => {
   console.log(`App started on port ${PORT}`);

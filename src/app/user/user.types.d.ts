@@ -3,6 +3,7 @@ export type User = {
   readonly email: string;
   readonly username: string;
   readonly password: string;
+  readonly cameras: Camera[];
 };
 
 export type UserToSave = {
