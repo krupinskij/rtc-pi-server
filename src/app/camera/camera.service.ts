@@ -3,7 +3,9 @@ import { BadRequestException, UnauthorizedException } from 'exception';
 import ConflictException from 'exception/conflict.exception';
 import { generateHash, validateHash } from 'utils';
 import cameraModel from './camera.model';
-import { Camera, NewCameraInput } from './camera.types';
+import { Camera, CameraCode, CameraRegisterInput, NewCameraInput } from './camera.types';
+import { customAlphabet } from 'nanoid';
+import { nolookalikes } from 'nanoid-dictionary';
 
 const getCameras = async (user?: User | null): Promise<Camera[]> => {
   if (!user) {
@@ -16,31 +18,33 @@ const getCameras = async (user?: User | null): Promise<Camera[]> => {
 };
 
 const registerCamera = async (
-  newCameraInput: NewCameraInput,
+  cameraRegisterInput: CameraRegisterInput,
   user?: User | null
-): Promise<Camera> => {
+): Promise<CameraCode> => {
   if (!user) {
     throw new UnauthorizedException('User does not exists');
   }
 
-  const { code, password } = newCameraInput;
+  const { password } = cameraRegisterInput;
 
-  const existingCamera = await cameraModel.findOne({ code });
-
-  if (!!existingCamera) {
-    throw new ConflictException('Camera already exists');
-  }
+  let code: string;
+  let isCodeOccupied = true;
+  const nanoid = customAlphabet(nolookalikes, 10);
+  do {
+    code = nanoid();
+    isCodeOccupied = await cameraModel.exists({ code });
+  } while (isCodeOccupied);
 
   const hashedPassword = await generateHash(password, 10);
 
-  const camera = await cameraModel.create({
+  await cameraModel.create({
     code,
     password: hashedPassword,
     owner: user,
     users: [user],
   });
 
-  return camera;
+  return { code };
 };
 
 const addCamera = async (newCameraInput: NewCameraInput, user?: User | null): Promise<Camera> => {

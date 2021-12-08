@@ -2,7 +2,7 @@ import { HttpException } from 'exception';
 import { Response } from 'express';
 import { AuthRequest } from 'model';
 import cameraService from './camera.service';
-import { NewCameraInput, Camera } from './camera.types';
+import { NewCameraInput, Camera, CameraRegisterInput, CameraCode } from './camera.types';
 
 const getCameras = async (req: AuthRequest, res: Response<Camera[] | string>) => {
   const user = req.user;
@@ -21,14 +21,17 @@ const getCameras = async (req: AuthRequest, res: Response<Camera[] | string>) =>
   }
 };
 
-const registerCamera = async (req: AuthRequest<NewCameraInput>, res: Response<Camera | string>) => {
-  const newCameraInput = req.body;
+const registerCamera = async (
+  req: AuthRequest<CameraRegisterInput>,
+  res: Response<CameraCode | string>
+) => {
+  const cameraRegisterInput = req.body;
   const user = req.user;
 
   try {
-    const camera = await cameraService.registerCamera(newCameraInput, user);
+    const cameraCode = await cameraService.registerCamera(cameraRegisterInput, user);
 
-    res.send(camera);
+    res.send(cameraCode);
   } catch (error: any) {
     if (error instanceof HttpException) {
       res.status(error.httpStatus).send(error.message);

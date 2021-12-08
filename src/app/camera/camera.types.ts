@@ -1,5 +1,9 @@
 import { User } from 'app/user/user.types';
 
+export type CameraRegisterInput = {
+  password: string;
+};
+
 export type NewCameraInput = {
   code: string;
   password: string;
@@ -11,4 +15,8 @@ export type Camera = {
   password: string;
   owner: User;
   users: User[];
+};
+
+export type CameraCode = {
+  code: string;
 };

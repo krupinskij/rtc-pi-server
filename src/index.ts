@@ -2,6 +2,7 @@ import { json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import { authenticate } from 'middleware/authenticate';
 import mongoose from 'mongoose';
 
 import authRouter from './app/auth/_routes';
@@ -30,6 +31,8 @@ app.use(
 );
 
 app.use('/api/auth', authRouter);
+
+app.use(authenticate);
 app.use('/api/user', userRouter);
 app.use('/api/camera', cameraRouter);
 
