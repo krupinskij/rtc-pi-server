@@ -6,6 +6,7 @@ import cameraModel from './camera.model';
 import { Camera, CameraCode, CameraRegisterInput, NewCameraInput } from './camera.types';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
+import userModel from 'app/user/user.model';
 
 const getCameras = async (user?: User | null): Promise<Camera[]> => {
   if (!user) {
@@ -37,12 +38,13 @@ const registerCamera = async (
 
   const hashedPassword = await generateHash(password, 10);
 
-  await cameraModel.create({
+  const newCamera = await cameraModel.create({
     code,
     password: hashedPassword,
     owner: user,
     users: [user],
   });
+  await userModel.findByIdAndUpdate(user._id, { $push: { cameras: newCamera._id } });
 
   return { code };
 };
