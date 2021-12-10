@@ -1,9 +1,8 @@
 import { User } from 'app/user/user.types';
 import { BadRequestException, UnauthorizedException } from 'exception';
-import ConflictException from 'exception/conflict.exception';
 import { generateHash, validateHash } from 'utils';
 import cameraModel from './camera.model';
-import { Camera, CameraCode, CameraRegisterInput, NewCameraInput } from './camera.types';
+import { Camera, CameraAddInput, CameraCode, CameraRegisterInput } from './camera.types';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 import userModel from 'app/user/user.model';
@@ -49,12 +48,12 @@ const registerCamera = async (
   return { code };
 };
 
-const addCamera = async (newCameraInput: NewCameraInput, user?: User | null): Promise<Camera> => {
+const addCamera = async (addCameraInput: CameraAddInput, user?: User | null): Promise<Camera> => {
   if (!user) {
     throw new UnauthorizedException('User does not exists');
   }
 
-  const { code, password } = newCameraInput;
+  const { code, password } = addCameraInput;
 
   const existingCamera = await cameraModel.findOne({ code });
 
@@ -71,11 +70,12 @@ const addCamera = async (newCameraInput: NewCameraInput, user?: User | null): Pr
   const existingCameraWithUsers = await existingCamera.populate('users');
   const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id === user._id);
 
-  if (!isUserHaveCamera) {
+  if (isUserHaveCamera) {
     throw new BadRequestException('You already own this camera');
   }
 
   existingCameraWithUsers.users.push(user);
+  await userModel.findByIdAndUpdate(user._id, { $push: { cameras: existingCamera._id } });
 
   return existingCameraWithUsers.save();
 };

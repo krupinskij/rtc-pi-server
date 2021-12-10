@@ -4,7 +4,7 @@ export type CameraRegisterInput = {
   password: string;
 };
 
-export type NewCameraInput = {
+export type CameraAddInput = {
   code: string;
   password: string;
 };
