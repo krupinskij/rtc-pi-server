@@ -44,7 +44,7 @@ const registerCamera = async (
     owner: user,
     users: [user],
   });
-  await userModel.findByIdAndUpdate(user._id, { $push: { cameras: newCamera._id } });
+  await userModel.findByIdAndUpdate(user._id, { $push: { ownedCameras: newCamera._id } });
 
   return { code };
 };
@@ -72,11 +72,11 @@ const addCamera = async (addCameraInput: CameraAddInput, user?: User | null): Pr
   const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id === user._id);
 
   if (isUserHaveCamera) {
-    throw new BadRequestException('You already own this camera');
+    throw new BadRequestException('You already have this camera');
   }
 
   existingCameraWithUsers.users.push(user);
-  await userModel.findByIdAndUpdate(user._id, { $push: { cameras: existingCamera._id } });
+  await userModel.findByIdAndUpdate(user._id, { $push: { usedCameras: existingCamera._id } });
 
   return existingCameraWithUsers.save();
 };

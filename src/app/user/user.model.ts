@@ -5,7 +5,13 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   username: String,
-  cameras: [
+  ownedCameras: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Camera',
+    },
+  ],
+  usedCameras: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Camera',
