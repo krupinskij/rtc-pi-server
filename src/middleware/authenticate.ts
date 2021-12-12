@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { validateHash } from 'app/auth/utils';
+import { validateHash } from 'utils';
 import userService from 'app/user/user.service';
 import config from 'config';
 import { AuthRequest, AccessTokenPayload, RefreshTokenPayload } from 'model';
