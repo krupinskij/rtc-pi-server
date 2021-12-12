@@ -7,14 +7,24 @@ import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 import userModel from 'app/user/user.model';
 
-const getCameras = async (user?: User | null): Promise<Camera[]> => {
+const getOwnedCameras = async (user?: User | null): Promise<Camera[]> => {
   if (!user) {
     throw new UnauthorizedException('User does not exists');
   }
 
-  const cameras = await cameraModel.find({ users: { $in: [user] } });
+  const existingUserWithCameras = await userModel.findById(user._id).populate('ownedCameras');
 
-  return cameras;
+  return existingUserWithCameras.ownedCameras;
+};
+
+const getUsedCameras = async (user?: User | null): Promise<Camera[]> => {
+  if (!user) {
+    throw new UnauthorizedException('User does not exists');
+  }
+
+  const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
+
+  return existingUserWithCameras.usedCameras;
 };
 
 const registerCamera = async (
@@ -82,7 +92,8 @@ const addCamera = async (addCameraInput: CameraAddInput, user?: User | null): Pr
 };
 
 export default {
-  getCameras,
+  getOwnedCameras,
+  getUsedCameras,
   registerCamera,
   addCamera,
 };

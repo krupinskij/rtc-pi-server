@@ -4,11 +4,28 @@ import { AuthRequest } from 'model';
 import cameraService from './camera.service';
 import { Camera, CameraRegisterInput, CameraCode, CameraAddInput } from './camera.types';
 
-const getCameras = async (req: AuthRequest, res: Response<Camera[] | string>) => {
+const getOwnedCameras = async (req: AuthRequest, res: Response<Camera[] | string>) => {
   const user = req.user;
 
   try {
-    const cameras = await cameraService.getCameras(user);
+    const cameras = await cameraService.getOwnedCameras(user);
+
+    res.send(cameras);
+  } catch (error: any) {
+    if (error instanceof HttpException) {
+      res.status(error.httpStatus).send(error.message);
+      return;
+    }
+
+    res.status(500).send(error.message);
+  }
+};
+
+const getUsedCameras = async (req: AuthRequest, res: Response<Camera[] | string>) => {
+  const user = req.user;
+
+  try {
+    const cameras = await cameraService.getUsedCameras(user);
 
     res.send(cameras);
   } catch (error: any) {
@@ -61,7 +78,8 @@ const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<Camera 
 };
 
 export default {
-  getCameras,
+  getOwnedCameras,
+  getUsedCameras,
   registerCamera,
   addCamera,
 };
