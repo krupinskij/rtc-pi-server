@@ -25,7 +25,7 @@ const registerCamera = async (
     throw new UnauthorizedException('User does not exists');
   }
 
-  const { password } = cameraRegisterInput;
+  const { name, password } = cameraRegisterInput;
 
   let code: string;
   let isCodeOccupied = true;
@@ -38,6 +38,7 @@ const registerCamera = async (
   const hashedPassword = await generateHash(password, 10);
 
   const newCamera = await cameraModel.create({
+    name,
     code,
     password: hashedPassword,
     owner: user,
