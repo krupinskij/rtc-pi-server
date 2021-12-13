@@ -2,29 +2,30 @@ import { User } from 'app/user/user.types';
 import { BadRequestException, UnauthorizedException } from 'exception';
 import { generateHash, validateHash } from 'utils';
 import cameraModel from './camera.model';
-import { Camera, CameraAddInput, CameraCode, CameraRegisterInput } from './camera.types';
+import { Camera, CameraAddInput, CameraCode, CameraDTO, CameraRegisterInput } from './camera.types';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 import userModel from 'app/user/user.model';
+import { mapToDTO } from './camera.utils';
 
-const getOwnedCameras = async (user?: User | null): Promise<Camera[]> => {
+const getOwnedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   if (!user) {
     throw new UnauthorizedException('User does not exists');
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('ownedCameras');
 
-  return existingUserWithCameras.ownedCameras;
+  return existingUserWithCameras.ownedCameras.map(mapToDTO);
 };
 
-const getUsedCameras = async (user?: User | null): Promise<Camera[]> => {
+const getUsedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   if (!user) {
     throw new UnauthorizedException('User does not exists');
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
 
-  return existingUserWithCameras.usedCameras;
+  return existingUserWithCameras.usedCameras.map(mapToDTO);
 };
 
 const registerCamera = async (
@@ -59,7 +60,10 @@ const registerCamera = async (
   return { code };
 };
 
-const addCamera = async (addCameraInput: CameraAddInput, user?: User | null): Promise<Camera> => {
+const addCamera = async (
+  addCameraInput: CameraAddInput,
+  user?: User | null
+): Promise<CameraDTO> => {
   if (!user) {
     throw new UnauthorizedException('User does not exists');
   }
@@ -87,8 +91,9 @@ const addCamera = async (addCameraInput: CameraAddInput, user?: User | null): Pr
 
   existingCameraWithUsers.users.push(user);
   await userModel.findByIdAndUpdate(user._id, { $push: { usedCameras: existingCamera._id } });
+  await existingCameraWithUsers.save();
 
-  return existingCameraWithUsers.save();
+  return mapToDTO(existingCameraWithUsers);
 };
 
 export default {

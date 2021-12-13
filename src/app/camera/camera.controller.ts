@@ -2,9 +2,9 @@ import { HttpException } from 'exception';
 import { Response } from 'express';
 import { AuthRequest } from 'model';
 import cameraService from './camera.service';
-import { Camera, CameraRegisterInput, CameraCode, CameraAddInput } from './camera.types';
+import { CameraRegisterInput, CameraCode, CameraAddInput, CameraDTO } from './camera.types';
 
-const getOwnedCameras = async (req: AuthRequest, res: Response<Camera[] | string>) => {
+const getOwnedCameras = async (req: AuthRequest, res: Response<CameraDTO[] | string>) => {
   const user = req.user;
 
   try {
@@ -21,7 +21,7 @@ const getOwnedCameras = async (req: AuthRequest, res: Response<Camera[] | string
   }
 };
 
-const getUsedCameras = async (req: AuthRequest, res: Response<Camera[] | string>) => {
+const getUsedCameras = async (req: AuthRequest, res: Response<CameraDTO[] | string>) => {
   const user = req.user;
 
   try {
@@ -59,7 +59,7 @@ const registerCamera = async (
   }
 };
 
-const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<Camera | string>) => {
+const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraDTO | string>) => {
   const cameraAddInput = req.body;
   const user = req.user;
 
