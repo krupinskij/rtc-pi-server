@@ -10,7 +10,7 @@ const register = async (registerInput: RegisterInput): Promise<Tokens> => {
   const existingUser = await userService.findByEmail(email);
 
   if (existingUser) {
-    throw new BadRequestException(`Cannot register with email ${email}`);
+    throw new BadRequestException('Użytkownik o takim emailu już istnieje');
   }
 
   const hashedPassword = await generateHash(password, 10);
@@ -32,12 +32,12 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   const existingUser = await userService.findByEmail(email);
 
   if (!existingUser) {
-    throw new UnauthorizedException('Invalid credentials');
+    throw new UnauthorizedException('Nieodpowiedni email lub hasło');
   }
 
   const isUserValid = await validateHash(password, existingUser.password);
   if (!isUserValid) {
-    throw new UnauthorizedException('Invalid credentials');
+    throw new UnauthorizedException('Nieodpowiedni email lub hasło');
   }
 
   return {
@@ -49,7 +49,7 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
 
 const refresh = async (user?: User | null): Promise<Tokens> => {
   if (!user) {
-    throw new UnauthorizedException("User doesn't exists");
+    throw new UnauthorizedException('Wystąpił błąd. Nastąpi wylogowanie...');
   }
 
   return {
