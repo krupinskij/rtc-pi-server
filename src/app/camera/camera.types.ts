@@ -22,3 +22,8 @@ export type Camera = {
 export type CameraCode = {
   code: string;
 };
+
+export type CameraDTO = {
+  _id: string;
+  name: string;
+};
