@@ -1,13 +1,16 @@
 import HttpException from 'exception/http.exception';
 import { AuthRequest, Request, Response } from 'model';
+import { validate } from 'utils';
 
 import authService from './auth.service';
 import { LoginInput, RegisterInput, HeaderTokens } from './auth.types';
+import { loginValidator, registerValidator } from './auth.validation';
 
 const login = async (req: Request<LoginInput>, res: Response<HeaderTokens | string>) => {
   const loginInput = req.body;
 
   try {
+    validate(loginInput, loginValidator);
     const { accessToken, refreshToken, csrfToken } = await authService.login(loginInput);
 
     res
@@ -36,6 +39,7 @@ const register = async (req: Request<RegisterInput>, res: Response<HeaderTokens 
   const registerInput = req.body;
 
   try {
+    validate(registerInput, registerValidator);
     const { accessToken, refreshToken, csrfToken } = await authService.register(registerInput);
 
     res

@@ -1,8 +1,10 @@
 import { HttpException } from 'exception';
 import { Response } from 'express';
 import { AuthRequest } from 'model';
+import { validate } from 'utils';
 import cameraService from './camera.service';
 import { CameraRegisterInput, CameraCode, CameraAddInput, CameraDTO } from './camera.types';
+import { cameraAddValidator, cameraRegisterValidator } from './camera.validation';
 
 const getOwnedCameras = async (req: AuthRequest, res: Response<CameraDTO[] | string>) => {
   const user = req.user;
@@ -46,6 +48,7 @@ const registerCamera = async (
   const user = req.user;
 
   try {
+    validate(cameraRegisterInput, cameraRegisterValidator);
     const cameraCode = await cameraService.registerCamera(cameraRegisterInput, user);
 
     res.send(cameraCode);
@@ -64,6 +67,7 @@ const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraD
   const user = req.user;
 
   try {
+    validate(cameraAddInput, cameraAddValidator);
     const camera = await cameraService.addCamera(cameraAddInput, user);
 
     res.send(camera);
