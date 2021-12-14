@@ -6,7 +6,7 @@ import authService from './auth.service';
 import { LoginInput, RegisterInput, HeaderTokens } from './auth.types';
 import { loginValidator, registerValidator } from './auth.validation';
 
-const login = async (req: Request<LoginInput>, res: Response<HeaderTokens | string>) => {
+const login = async (req: Request<LoginInput>, res: Response<HeaderTokens>) => {
   const loginInput = req.body;
 
   try {
@@ -26,16 +26,17 @@ const login = async (req: Request<LoginInput>, res: Response<HeaderTokens | stri
       })
       .send({ accessToken, csrfToken });
   } catch (error: any) {
+    const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send(error.message);
+      res.status(error.httpStatus).send({ message, authRetry });
       return;
     }
 
-    res.status(500).send(error.message);
+    res.status(500).send({ message, stack });
   }
 };
 
-const register = async (req: Request<RegisterInput>, res: Response<HeaderTokens | string>) => {
+const register = async (req: Request<RegisterInput>, res: Response<HeaderTokens>) => {
   const registerInput = req.body;
 
   try {
@@ -55,12 +56,13 @@ const register = async (req: Request<RegisterInput>, res: Response<HeaderTokens 
       })
       .send({ accessToken, csrfToken });
   } catch (error: any) {
+    const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send(error.message);
+      res.status(error.httpStatus).send({ message, authRetry });
       return;
     }
 
-    res.status(500).send(error.message);
+    res.status(500).send({ message, stack });
   }
 };
 
@@ -83,12 +85,13 @@ const refresh = async (req: AuthRequest, res: Response<HeaderTokens | string>) =
       })
       .send({ accessToken, csrfToken });
   } catch (error: any) {
+    const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send(error.message);
+      res.status(error.httpStatus).send({ message, authRetry });
       return;
     }
 
-    res.status(500).send(error.message);
+    res.status(500).send({ message, stack });
   }
 };
 

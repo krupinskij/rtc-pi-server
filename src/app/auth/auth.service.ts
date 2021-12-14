@@ -32,12 +32,12 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   const existingUser = await userService.findByEmail(email);
 
   if (!existingUser) {
-    throw new UnauthorizedException('Nieodpowiedni email lub hasło');
+    throw new UnauthorizedException('Nieodpowiedni email lub hasło', false);
   }
 
   const isUserValid = await validateHash(password, existingUser.password);
   if (!isUserValid) {
-    throw new UnauthorizedException('Nieodpowiedni email lub hasło');
+    throw new UnauthorizedException('Nieodpowiedni email lub hasło', false);
   }
 
   return {
@@ -49,7 +49,7 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
 
 const refresh = async (user?: User | null): Promise<Tokens> => {
   if (!user) {
-    throw new UnauthorizedException('Wystąpił błąd. Nastąpi wylogowanie...');
+    throw new UnauthorizedException('Wystąpił błąd. Nastąpi wylogowanie...', true);
   }
 
   return {

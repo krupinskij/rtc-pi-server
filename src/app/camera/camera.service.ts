@@ -10,7 +10,7 @@ import { mapToDTO } from './camera.utils';
 
 const getOwnedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany');
+    throw new UnauthorizedException('Nie jesteś zalogowany', true);
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('ownedCameras');
@@ -20,7 +20,7 @@ const getOwnedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
 
 const getUsedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany');
+    throw new UnauthorizedException('Nie jesteś zalogowany', true);
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
@@ -33,7 +33,7 @@ const registerCamera = async (
   user?: User | null
 ): Promise<CameraCode> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany');
+    throw new UnauthorizedException('Nie jesteś zalogowany', true);
   }
 
   const { name, password } = cameraRegisterInput;
@@ -65,7 +65,7 @@ const addCamera = async (
   user?: User | null
 ): Promise<CameraDTO> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany');
+    throw new UnauthorizedException('Nie jesteś zalogowany', true);
   }
 
   const { code, password } = addCameraInput;

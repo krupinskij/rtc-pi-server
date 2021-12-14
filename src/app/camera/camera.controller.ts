@@ -1,12 +1,11 @@
 import { HttpException } from 'exception';
-import { Response } from 'express';
-import { AuthRequest } from 'model';
+import { AuthRequest, Response } from 'model';
 import { validate } from 'utils';
 import cameraService from './camera.service';
 import { CameraRegisterInput, CameraCode, CameraAddInput, CameraDTO } from './camera.types';
 import { cameraAddValidator, cameraRegisterValidator } from './camera.validation';
 
-const getOwnedCameras = async (req: AuthRequest, res: Response<CameraDTO[] | string>) => {
+const getOwnedCameras = async (req: AuthRequest, res: Response<CameraDTO[]>) => {
   const user = req.user;
 
   try {
@@ -14,16 +13,17 @@ const getOwnedCameras = async (req: AuthRequest, res: Response<CameraDTO[] | str
 
     res.send(cameras);
   } catch (error: any) {
+    const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send(error.message);
+      res.status(error.httpStatus).send({ message, authRetry });
       return;
     }
 
-    res.status(500).send(error.message);
+    res.status(500).send({ message, stack });
   }
 };
 
-const getUsedCameras = async (req: AuthRequest, res: Response<CameraDTO[] | string>) => {
+const getUsedCameras = async (req: AuthRequest, res: Response<CameraDTO[]>) => {
   const user = req.user;
 
   try {
@@ -31,12 +31,13 @@ const getUsedCameras = async (req: AuthRequest, res: Response<CameraDTO[] | stri
 
     res.send(cameras);
   } catch (error: any) {
+    const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send(error.message);
+      res.status(error.httpStatus).send({ message, authRetry });
       return;
     }
 
-    res.status(500).send(error.message);
+    res.status(500).send({ message, stack });
   }
 };
 
@@ -53,16 +54,17 @@ const registerCamera = async (
 
     res.send(cameraCode);
   } catch (error: any) {
+    const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send(error.message);
+      res.status(error.httpStatus).send({ message, authRetry });
       return;
     }
 
-    res.status(500).send(error.message);
+    res.status(500).send({ message, stack });
   }
 };
 
-const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraDTO | string>) => {
+const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraDTO>) => {
   const cameraAddInput = req.body;
   const user = req.user;
 
@@ -72,12 +74,13 @@ const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraD
 
     res.send(camera);
   } catch (error: any) {
+    const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send(error.message);
+      res.status(error.httpStatus).send({ message, authRetry });
       return;
     }
 
-    res.status(500).send(error.message);
+    res.status(500).send({ message, stack });
   }
 };
 

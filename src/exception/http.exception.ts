@@ -1,7 +1,7 @@
 import { HttpStatus } from './model';
 
 export default class HttpException extends Error {
-  constructor(message: string, public httpStatus: HttpStatus) {
+  constructor(public message: string, public httpStatus: HttpStatus, public authRetry: boolean) {
     super(message);
   }
 }
