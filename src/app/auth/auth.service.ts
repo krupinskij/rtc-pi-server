@@ -4,13 +4,19 @@ import userService from '../user/user.service';
 import { User } from '../user/user.types';
 import { LoginInput, RegisterInput, Tokens } from './auth.types';
 import { generateHash, signAccessToken, signRefreshToken, validateHash } from 'utils';
+import userModel from 'app/user/user.model';
 
 const register = async (registerInput: RegisterInput): Promise<Tokens> => {
-  const { email, password } = registerInput;
-  const existingUser = await userService.findByEmail(email);
+  const { email, password, username } = registerInput;
 
-  if (existingUser) {
+  const isUserFromEmail = await userModel.exists({ email });
+  if (isUserFromEmail) {
     throw new BadRequestException('Użytkownik o takim emailu już istnieje');
+  }
+
+  const isUserFromUsername = await userModel.exists({ username });
+  if (isUserFromUsername) {
+    throw new BadRequestException('Użytkownik o takiej nazwie już istnieje');
   }
 
   const hashedPassword = await generateHash(password, 10);
