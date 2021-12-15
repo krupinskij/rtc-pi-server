@@ -16,7 +16,14 @@ export interface Request<ReqBody = any, ReqParams = core.ParamsDictionary>
 
 export interface AuthRequest<ReqBody = any, ReqParams = core.ParamsDictionary>
   extends Request<ReqBody, ReqParams> {
-  user?: User;
+  user?: User | null;
 }
 
-export interface Response<ResBody = any> extends ExpressResponse<ResBody, Record<string, any>> {}
+export interface Response<ResBody = any>
+  extends ExpressResponse<ResBody | RequestError, Record<string, any>> {}
+
+export interface RequestError {
+  message: string;
+  stack?: string;
+  authRetry?: boolean;
+}

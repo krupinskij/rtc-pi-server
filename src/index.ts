@@ -2,9 +2,12 @@ import { json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import { authenticate } from 'middleware/authenticate';
 import mongoose from 'mongoose';
 
-import authRouter from './app/auth/_routes';
+import authRouter from './app/auth/auth.routes';
+import cameraRouter from './app/camera/camera.routes';
+import userRouter from './app/user/user.routes';
 import config from './config';
 
 const CONNECTION_STRING = config.CONNECTION_STRING;
@@ -28,6 +31,10 @@ app.use(
 );
 
 app.use('/api/auth', authRouter);
+
+app.use(authenticate);
+app.use('/api/user', userRouter);
+app.use('/api/camera', cameraRouter);
 
 app.listen(PORT, () => {
   console.log(`App started on port ${PORT}`);

@@ -3,14 +3,20 @@ import { BadRequestException, UnauthorizedException } from 'exception';
 import userService from '../user/user.service';
 import { User } from '../user/user.types';
 import { LoginInput, RegisterInput, Tokens } from './auth.types';
-import { generateHash, signAccessToken, signRefreshToken, validateHash } from './utils';
+import { generateHash, signAccessToken, signRefreshToken, validateHash } from 'utils';
+import userModel from 'app/user/user.model';
 
 const register = async (registerInput: RegisterInput): Promise<Tokens> => {
-  const { email, password } = registerInput;
-  const existingUser = await userService.findByEmail(email);
+  const { email, password, username } = registerInput;
 
-  if (existingUser) {
-    throw new BadRequestException(`Cannot register with email ${email}`);
+  const isUserFromEmail = await userModel.exists({ email });
+  if (isUserFromEmail) {
+    throw new BadRequestException('Użytkownik o takim emailu już istnieje');
+  }
+
+  const isUserFromUsername = await userModel.exists({ username });
+  if (isUserFromUsername) {
+    throw new BadRequestException('Użytkownik o takiej nazwie już istnieje');
   }
 
   const hashedPassword = await generateHash(password, 10);
@@ -32,12 +38,12 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   const existingUser = await userService.findByEmail(email);
 
   if (!existingUser) {
-    throw new UnauthorizedException('Invalid credentials');
+    throw new UnauthorizedException('Nieodpowiedni email lub hasło', false);
   }
 
   const isUserValid = await validateHash(password, existingUser.password);
   if (!isUserValid) {
-    throw new UnauthorizedException('Invalid credentials');
+    throw new UnauthorizedException('Nieodpowiedni email lub hasło', false);
   }
 
   return {
@@ -47,9 +53,9 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   };
 };
 
-const refresh = async (user?: User): Promise<Tokens> => {
+const refresh = async (user?: User | null): Promise<Tokens> => {
   if (!user) {
-    throw new UnauthorizedException("User doesn't exists");
+    throw new UnauthorizedException('Wystąpił błąd. Nastąpi wylogowanie...', true);
   }
 
   return {

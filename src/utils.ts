@@ -2,6 +2,9 @@ import { User } from 'app/user/user.types';
 import jwt from 'jsonwebtoken';
 import config from 'config';
 import bcrypt from 'bcrypt';
+import { BadRequestException } from 'exception';
+
+import { ObjectSchema } from 'joi';
 
 export const signAccessToken = (user: User): string => {
   const payload = {
@@ -30,4 +33,10 @@ export const generateHash = async (data: string, saltRound: number = 10): Promis
   const hashedData = await bcrypt.hash(data, salt);
 
   return hashedData;
+};
+
+export const validate = (body: any, validator: ObjectSchema): void => {
+  const { error } = validator.validate(body);
+
+  if (!!error) throw new BadRequestException('Niepoprawny format danych wejściowych');
 };
