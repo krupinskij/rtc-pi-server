@@ -5,7 +5,7 @@ import express from 'express';
 import { authenticate } from 'middleware/authenticate';
 import mongoose from 'mongoose';
 
-import authRouter from './app/auth/_routes';
+import authRouter from './app/auth/auth.routes';
 import cameraRouter from './app/camera/camera.routes';
 import userRouter from './app/user/user.routes';
 import config from './config';

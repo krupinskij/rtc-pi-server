@@ -3,6 +3,6 @@ import { HttpStatus } from './model';
 
 export default class ConflictException extends HttpException {
   constructor(message: string) {
-    super(message, HttpStatus.CONFLICT);
+    super(message, HttpStatus.CONFLICT, false);
   }
 }
