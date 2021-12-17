@@ -5,7 +5,11 @@ import express from 'express';
 import { authenticate } from 'middleware/authenticate';
 import mongoose from 'mongoose';
 import { createServer } from 'http';
+<<<<<<< HEAD
 import { Server, Socket } from 'socket.io';
+=======
+import { Server } from 'socket.io';
+>>>>>>> c0f3467 (WebRTC: Add socket io)
 
 import authRouter from './app/auth/auth.routes';
 import cameraRouter from './app/camera/camera.routes';
