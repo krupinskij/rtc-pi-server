@@ -5,6 +5,7 @@ const cameraSchema = new mongoose.Schema({
   name: String,
   code: String,
   password: String,
+  sid: String,
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

@@ -15,6 +15,7 @@ export type Camera = {
   name: string;
   code: string;
   password: string;
+  sid: string;
   owner: User;
   users: User[];
 };
@@ -26,4 +27,5 @@ export type CameraCode = {
 export type CameraDTO = {
   _id: string;
   name: string;
+  sid: string;
 };

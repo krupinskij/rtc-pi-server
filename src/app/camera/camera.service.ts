@@ -96,9 +96,27 @@ const addCamera = async (
   return mapToDTO(existingCameraWithUsers);
 };
 
+const saveCameraSID = async (code: string, sid: string) => {
+  const camera = await cameraModel.findOne({ code });
+
+  if (!camera) return;
+
+  camera.sid = sid;
+
+  await camera.save();
+};
+
+const getCameraSID = async (code: string) => {
+  const camera = await cameraModel.findOne({ code });
+
+  return camera?.sid;
+};
+
 export default {
   getOwnedCameras,
   getUsedCameras,
   registerCamera,
   addCamera,
+  saveCameraSID,
+  getCameraSID,
 };
