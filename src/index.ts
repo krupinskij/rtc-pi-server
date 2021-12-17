@@ -4,6 +4,8 @@ import cors from 'cors';
 import express from 'express';
 import { authenticate } from 'middleware/authenticate';
 import mongoose from 'mongoose';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 import authRouter from './app/auth/auth.routes';
 import cameraRouter from './app/camera/camera.routes';
@@ -20,6 +22,7 @@ mongoose
   .catch((err) => console.error(err));
 
 const app = express();
+
 app.use(json());
 app.use(cookieParser());
 
@@ -36,6 +39,9 @@ app.use(authenticate);
 app.use('/api/user', userRouter);
 app.use('/api/camera', cameraRouter);
 
-app.listen(PORT, () => {
+const server = createServer(app);
+const io = new Server(server);
+
+server.listen(PORT, () => {
   console.log(`App started on port ${PORT}`);
 });
