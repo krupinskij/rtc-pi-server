@@ -41,7 +41,11 @@ app.use('/api/user', userRouter);
 app.use('/api/camera', cameraRouter);
 
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: ORIGIN,
+  },
+});
 
 io.on('connection', (socket: Socket) => {
   console.log(`Connection established with socket ${socket.id}`);
@@ -50,8 +54,9 @@ io.on('connection', (socket: Socket) => {
     await cameraService.saveCameraSID(code, socket.id);
   });
 
-  socket.on('get-offer-from-server', async (code) => {
-    const sid = await cameraService.getCameraSID(code);
+  socket.on('get-offer-from-server', async (cameraId) => {
+    const sid = await cameraService.getCameraSID(cameraId);
+    console.log(sid, cameraId);
 
     if (!sid) return;
 
@@ -62,8 +67,8 @@ io.on('connection', (socket: Socket) => {
     socket.to(userId).emit('send-offer-to-client', offer);
   });
 
-  socket.on('send-answer-to-server', async (code, answer) => {
-    const sid = await cameraService.getCameraSID(code);
+  socket.on('send-answer-to-server', async (cameraId, answer) => {
+    const sid = await cameraService.getCameraSID(cameraId);
 
     if (!sid) return;
 

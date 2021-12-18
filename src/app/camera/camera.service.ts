@@ -106,8 +106,8 @@ const saveCameraSID = async (code: string, sid: string) => {
   await camera.save();
 };
 
-const getCameraSID = async (code: string) => {
-  const camera = await cameraModel.findOne({ code });
+const getCameraSID = async (cameraId: string) => {
+  const camera = await cameraModel.findById(cameraId);
 
   return camera?.sid;
 };
