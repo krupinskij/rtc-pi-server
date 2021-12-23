@@ -8,5 +8,6 @@ router.get('/owned', cameraController.getOwnedCameras);
 router.get('/used', cameraController.getUsedCameras);
 router.post('/register', cameraController.registerCamera);
 router.post('/add', cameraController.addCamera);
+router.delete('/remove/:id', cameraController.removeCamera);
 
 export default router;

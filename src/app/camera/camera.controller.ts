@@ -84,9 +84,29 @@ const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraD
   }
 };
 
+const removeCamera = async (req: AuthRequest<void, { id: string }>, res: Response<void>) => {
+  const user = req.user;
+  const id = req.params.id;
+
+  try {
+    await cameraService.removeCamera(id, user);
+
+    res.send();
+  } catch (error: any) {
+    const { message, stack, authRetry } = error;
+    if (error instanceof HttpException) {
+      res.status(error.httpStatus).send({ message, authRetry });
+      return;
+    }
+
+    res.status(500).send({ message, stack });
+  }
+};
+
 export default {
   getOwnedCameras,
   getUsedCameras,
   registerCamera,
   addCamera,
+  removeCamera,
 };
