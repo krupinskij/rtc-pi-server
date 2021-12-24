@@ -9,3 +9,7 @@ export const cameraAddValidator = joi.object({
   code: joi.string().length(10).required(),
   password: joi.string().min(5).max(16).required(),
 });
+
+export const cameraRemovePermValidator = joi.object({
+  password: joi.string().min(5).max(16).required(),
+});
