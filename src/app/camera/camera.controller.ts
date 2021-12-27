@@ -2,8 +2,18 @@ import { HttpException } from 'exception';
 import { AuthRequest, Response } from 'model';
 import { validate } from 'utils';
 import cameraService from './camera.service';
-import { CameraRegisterInput, CameraCode, CameraAddInput, CameraDTO } from './camera.types';
-import { cameraAddValidator, cameraRegisterValidator } from './camera.validation';
+import {
+  CameraRegisterInput,
+  CameraCode,
+  CameraAddInput,
+  CameraDTO,
+  CameraRemovePermInput,
+} from './camera.types';
+import {
+  cameraAddValidator,
+  cameraRegisterValidator,
+  cameraRemovePermValidator,
+} from './camera.validation';
 
 const getOwnedCameras = async (req: AuthRequest, res: Response<CameraDTO[]>) => {
   const user = req.user;
@@ -84,9 +94,54 @@ const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraD
   }
 };
 
+const removeCamera = async (req: AuthRequest<void, { id: string }>, res: Response<void>) => {
+  const user = req.user;
+  const id = req.params.id;
+
+  try {
+    await cameraService.removeCamera(id, user);
+
+    res.send();
+  } catch (error: any) {
+    const { message, stack, authRetry } = error;
+    if (error instanceof HttpException) {
+      res.status(error.httpStatus).send({ message, authRetry });
+      return;
+    }
+
+    res.status(500).send({ message, stack });
+  }
+};
+
+const removePermCamera = async (
+  req: AuthRequest<CameraRemovePermInput, { id: string }>,
+  res: Response<void>
+) => {
+  const user = req.user;
+  const id = req.params.id;
+  const cameraRemovePermInput = req.body;
+
+  try {
+    validate(cameraRemovePermInput, cameraRemovePermValidator);
+    await cameraService.removePermCamera(id, cameraRemovePermInput, user);
+
+    res.send();
+  } catch (error: any) {
+    const { message, stack, authRetry } = error;
+    if (error instanceof HttpException) {
+      res.status(error.httpStatus).send({ message, authRetry });
+      return;
+    }
+
+    res.status(500).send({ message, stack });
+  }
+};
+
 export default {
   getOwnedCameras,
   getUsedCameras,
   registerCamera,
   addCamera,
+  removeCamera,
+  removePermCamera,
 };

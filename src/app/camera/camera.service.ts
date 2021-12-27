@@ -2,7 +2,13 @@ import { User } from 'app/user/user.types';
 import { BadRequestException, UnauthorizedException } from 'exception';
 import { generateHash, validateHash } from 'utils';
 import cameraModel from './camera.model';
-import { CameraAddInput, CameraCode, CameraDTO, CameraRegisterInput } from './camera.types';
+import {
+  CameraAddInput,
+  CameraCode,
+  CameraDTO,
+  CameraRegisterInput,
+  CameraRemovePermInput,
+} from './camera.types';
 import { customAlphabet } from 'nanoid';
 import { nolookalikes } from 'nanoid-dictionary';
 import userModel from 'app/user/user.model';
@@ -83,7 +89,7 @@ const addCamera = async (
   }
 
   const existingCameraWithUsers = await existingCamera.populate('users');
-  const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id === user._id);
+  const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id == user._id);
 
   if (isUserHaveCamera) {
     throw new BadRequestException('Już masz tę kamerę');
@@ -96,9 +102,84 @@ const addCamera = async (
   return mapToDTO(existingCameraWithUsers);
 };
 
+const removeCamera = async (id: string, user?: User | null) => {
+  if (!user) {
+    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+  }
+
+  const existingCamera = await cameraModel.findById(id);
+  if (!existingCamera) {
+    throw new BadRequestException('Podana kamera nie istnieje');
+  }
+
+  const existingCameraWithUsers = await existingCamera.populate('users');
+  const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id == user._id);
+  if (!isUserHaveCamera) {
+    throw new UnauthorizedException('Nie masz tej kamery', false);
+  }
+
+  const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
+  const isUserUsingCamera = existingUserWithCameras.usedCameras.find((c) => c._id == id);
+  if (!isUserUsingCamera) {
+    throw new UnauthorizedException('Nie masz tej kamery', false);
+  }
+
+  existingCameraWithUsers.users = existingCameraWithUsers.users.filter((u) => u._id != user._id);
+  await existingCameraWithUsers.save();
+
+  existingUserWithCameras.usedCameras = existingUserWithCameras.usedCameras.filter(
+    (c) => c._id != id
+  );
+  await existingUserWithCameras.save();
+};
+
+const removePermCamera = async (
+  id: string,
+  removePermCameraInput: CameraRemovePermInput,
+  user?: User | null
+) => {
+  if (!user) {
+    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+  }
+
+  const { password } = removePermCameraInput;
+
+  const existingCamera = await cameraModel.findById(id);
+  if (!existingCamera) {
+    throw new BadRequestException('Podana kamera nie istnieje lub hasło nie jest poprawne');
+  }
+
+  const isPasswordCorrect = await validateHash(password, existingCamera.password);
+  if (!isPasswordCorrect) {
+    throw new BadRequestException('Podana kamera nie istnieje lub hasło nie jest poprawne');
+  }
+
+  const isUserAnOwner = existingCamera.owner._id == user._id;
+  if (!isUserAnOwner) {
+    throw new UnauthorizedException('Nie jesteś właścicielem tej kamery', false);
+  }
+
+  const existingCameraWithUsers = await existingCamera.populate('users');
+
+  await userModel.updateMany(
+    { _id: { $in: existingCameraWithUsers.users.map((user) => user._id) } },
+    { $pull: { ownedCameras: id } }
+  );
+
+  const existingUserWithOwnedCameras = await userModel.findById(user._id).populate('ownedCameras');
+  existingUserWithOwnedCameras.ownedCameras = existingUserWithOwnedCameras.ownedCameras.filter(
+    (camera) => camera._id != id
+  );
+  await existingUserWithOwnedCameras.save();
+
+  await existingCamera.delete();
+};
+
 export default {
   getOwnedCameras,
   getUsedCameras,
   registerCamera,
   addCamera,
+  removeCamera,
+  removePermCamera,
 };
