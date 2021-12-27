@@ -8,9 +8,11 @@ import {
   CameraAddInput,
   CameraDTO,
   CameraRemovePermInput,
+  CameraEditInput,
 } from './camera.types';
 import {
   cameraAddValidator,
+  cameraEditValidator,
   cameraRegisterValidator,
   cameraRemovePermValidator,
 } from './camera.validation';
@@ -94,6 +96,30 @@ const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraD
   }
 };
 
+const editCamera = async (
+  req: AuthRequest<CameraEditInput, { id: string }>,
+  res: Response<void>
+) => {
+  const user = req.user;
+  const id = req.params.id;
+  const cameraEditInput = req.body;
+
+  try {
+    validate(cameraEditInput, cameraEditValidator);
+    await cameraService.editCamera(id, cameraEditInput, user);
+
+    res.send();
+  } catch (error: any) {
+    const { message, stack, authRetry } = error;
+    if (error instanceof HttpException) {
+      res.status(error.httpStatus).send({ message, authRetry });
+      return;
+    }
+
+    res.status(500).send({ message, stack });
+  }
+};
+
 const removeCamera = async (req: AuthRequest<void, { id: string }>, res: Response<void>) => {
   const user = req.user;
   const id = req.params.id;
@@ -142,6 +168,7 @@ export default {
   getUsedCameras,
   registerCamera,
   addCamera,
+  editCamera,
   removeCamera,
   removePermCamera,
 };
