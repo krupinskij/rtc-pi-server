@@ -6,6 +6,7 @@ import {
   CameraAddInput,
   CameraCode,
   CameraDTO,
+  CameraEditInput,
   CameraRegisterInput,
   CameraRemovePermInput,
 } from './camera.types';
@@ -102,6 +103,35 @@ const addCamera = async (
   return mapToDTO(existingCameraWithUsers);
 };
 
+const editCamera = async (id: string, editCameraInput: CameraEditInput, user?: User | null) => {
+  if (!user) {
+    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+  }
+
+  const existingCamera = await cameraModel.findById(id);
+  if (!existingCamera) {
+    throw new BadRequestException('Podana kamera nie istnieje');
+  }
+
+  const { newName, newPassword, password } = editCameraInput;
+
+  const isPasswordCorrect = await validateHash(password, existingCamera.password);
+  if (!isPasswordCorrect) {
+    throw new BadRequestException('Podana kamera nie istnieje lub hasło nie jest poprawne');
+  }
+
+  if (newName) {
+    existingCamera.name = newName;
+  }
+
+  if (newPassword) {
+    const hashedPassword = await generateHash(newPassword, 10);
+    existingCamera.password = hashedPassword;
+  }
+
+  await existingCamera.save();
+};
+
 const removeCamera = async (id: string, user?: User | null) => {
   if (!user) {
     throw new UnauthorizedException('Nie jesteś zalogowany', true);
@@ -180,6 +210,7 @@ export default {
   getUsedCameras,
   registerCamera,
   addCamera,
+  editCamera,
   removeCamera,
   removePermCamera,
 };

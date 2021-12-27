@@ -8,6 +8,7 @@ router.get('/owned', cameraController.getOwnedCameras);
 router.get('/used', cameraController.getUsedCameras);
 router.post('/register', cameraController.registerCamera);
 router.post('/add', cameraController.addCamera);
+router.put('/edit/:id', cameraController.editCamera);
 router.delete('/remove/:id', cameraController.removeCamera);
 router.delete('/removeperm/:id', cameraController.removePermCamera);
 
