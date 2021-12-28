@@ -17,7 +17,7 @@ import { mapToDTO } from './camera.utils';
 
 const getOwnedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('ownedCameras');
@@ -27,7 +27,7 @@ const getOwnedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
 
 const getUsedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
@@ -40,7 +40,7 @@ const registerCamera = async (
   user?: User | null
 ): Promise<CameraCode> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const { name, password } = cameraRegisterInput;
@@ -72,7 +72,7 @@ const addCamera = async (
   user?: User | null
 ): Promise<CameraDTO> => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const { code, password } = addCameraInput;
@@ -80,20 +80,20 @@ const addCamera = async (
   const existingCamera = await cameraModel.findOne({ code });
 
   if (!existingCamera) {
-    throw new BadRequestException('Kod kamery lub hasło nie jest poprawne');
+    throw new BadRequestException('incorrect.code-password');
   }
 
   const isPasswordCorrect = await validateHash(password, existingCamera.password);
 
   if (!isPasswordCorrect) {
-    throw new BadRequestException('Kod kamery lub hasło nie jest poprawne');
+    throw new BadRequestException('incorrect.code-password');
   }
 
   const existingCameraWithUsers = await existingCamera.populate('users');
   const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id == user._id);
 
   if (isUserHaveCamera) {
-    throw new BadRequestException('Już masz tę kamerę');
+    throw new BadRequestException('camera.already-have');
   }
 
   existingCameraWithUsers.users.push(user);
@@ -105,19 +105,19 @@ const addCamera = async (
 
 const editCamera = async (id: string, editCameraInput: CameraEditInput, user?: User | null) => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const existingCamera = await cameraModel.findById(id);
   if (!existingCamera) {
-    throw new BadRequestException('Podana kamera nie istnieje');
+    throw new BadRequestException('incorrect.camera-password');
   }
 
   const { newName, newPassword, password } = editCameraInput;
 
   const isPasswordCorrect = await validateHash(password, existingCamera.password);
   if (!isPasswordCorrect) {
-    throw new BadRequestException('Podana kamera nie istnieje lub hasło nie jest poprawne');
+    throw new BadRequestException('incorrect.camera-password');
   }
 
   if (newName) {
@@ -134,24 +134,24 @@ const editCamera = async (id: string, editCameraInput: CameraEditInput, user?: U
 
 const removeCamera = async (id: string, user?: User | null) => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const existingCamera = await cameraModel.findById(id);
   if (!existingCamera) {
-    throw new BadRequestException('Podana kamera nie istnieje');
+    throw new BadRequestException('camera.not-exists');
   }
 
   const existingCameraWithUsers = await existingCamera.populate('users');
   const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id == user._id);
   if (!isUserHaveCamera) {
-    throw new UnauthorizedException('Nie masz tej kamery', false);
+    throw new UnauthorizedException('camera.not-have', false);
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
   const isUserUsingCamera = existingUserWithCameras.usedCameras.find((c) => c._id == id);
   if (!isUserUsingCamera) {
-    throw new UnauthorizedException('Nie masz tej kamery', false);
+    throw new UnauthorizedException('camera.not-have', false);
   }
 
   existingCameraWithUsers.users = existingCameraWithUsers.users.filter((u) => u._id != user._id);
@@ -169,24 +169,24 @@ const removePermCamera = async (
   user?: User | null
 ) => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const { password } = removePermCameraInput;
 
   const existingCamera = await cameraModel.findById(id);
   if (!existingCamera) {
-    throw new BadRequestException('Podana kamera nie istnieje lub hasło nie jest poprawne');
+    throw new BadRequestException('incorrect.camera-password');
   }
 
   const isPasswordCorrect = await validateHash(password, existingCamera.password);
   if (!isPasswordCorrect) {
-    throw new BadRequestException('Podana kamera nie istnieje lub hasło nie jest poprawne');
+    throw new BadRequestException('incorrect.camera-password');
   }
 
   const isUserAnOwner = existingCamera.owner._id == user._id;
   if (!isUserAnOwner) {
-    throw new UnauthorizedException('Nie jesteś właścicielem tej kamery', false);
+    throw new UnauthorizedException('camera.not-owner', false);
   }
 
   const existingCameraWithUsers = await existingCamera.populate('users');

@@ -17,19 +17,19 @@ const createUser = async (userToSave: UserToSave): Promise<User> => {
 
 const editUser = async (editUserInput: EditUserInput, user?: User | null) => {
   if (!user) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const existingUser = await userModel.findById(user._id);
   if (!existingUser) {
-    throw new UnauthorizedException('Nie jesteś zalogowany', true);
+    throw new UnauthorizedException('user.not-logged', true);
   }
 
   const { newPassword, password } = editUserInput;
 
   const isPasswordCorrect = await validateHash(password, existingUser.password);
   if (!isPasswordCorrect) {
-    throw new UnauthorizedException('Podane hasło nie jest poprawne', false);
+    throw new UnauthorizedException('incorrect.password', false);
   }
 
   const hashedPassword = await generateHash(newPassword, 10);

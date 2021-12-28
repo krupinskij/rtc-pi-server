@@ -1,0 +1,18 @@
+{
+  "camera.already-have": "You already have this camera",
+  "camera.not-exists": "This camera doesn't exist",
+  "camera.not-have": "You don't have this camera",
+  "camera.not-owner": "You're not the owner of this camera",
+
+  "incorrect.code-password": "Code or password is incorrect",
+  "incorrect.camera-password": "Camera doesn't exist or password is incorrect",
+  "incorrect.email-password": "Email or password is incorrect",
+  "incorrect.password": "Password is incorrect",
+
+  "error.logout": "Error occured. You'll be signed out...",
+
+  "exists.user.email": "User with this email already exists",
+  "exists.user.username": "User with this username already exists",
+
+  "user.not-logged": "You're logged out"
+}

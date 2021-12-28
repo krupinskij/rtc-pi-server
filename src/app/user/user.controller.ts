@@ -17,7 +17,7 @@ const editUser = async (req: AuthRequest<EditUserInput>, res: Response<void>) =>
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 

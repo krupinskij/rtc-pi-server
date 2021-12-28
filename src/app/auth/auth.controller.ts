@@ -28,7 +28,7 @@ const login = async (req: Request<LoginInput>, res: Response<HeaderTokens>) => {
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -58,7 +58,7 @@ const register = async (req: Request<RegisterInput>, res: Response<HeaderTokens>
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -87,7 +87,7 @@ const refresh = async (req: AuthRequest, res: Response<HeaderTokens | string>) =
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 

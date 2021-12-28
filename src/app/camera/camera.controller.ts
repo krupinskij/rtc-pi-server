@@ -27,7 +27,7 @@ const getOwnedCameras = async (req: AuthRequest, res: Response<CameraDTO[]>) => 
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -45,7 +45,7 @@ const getUsedCameras = async (req: AuthRequest, res: Response<CameraDTO[]>) => {
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -68,7 +68,7 @@ const registerCamera = async (
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -88,7 +88,7 @@ const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraD
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -112,7 +112,7 @@ const editCamera = async (
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -131,7 +131,7 @@ const removeCamera = async (req: AuthRequest<void, { id: string }>, res: Respons
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
@@ -155,7 +155,7 @@ const removePermCamera = async (
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {
-      res.status(error.httpStatus).send({ message, authRetry });
+      res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
 
