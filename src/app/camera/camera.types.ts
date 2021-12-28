@@ -10,6 +10,16 @@ export type CameraAddInput = {
   password: string;
 };
 
+export type CameraEditInput = {
+  newName?: string;
+  newPassword?: string;
+  password: string;
+};
+
+export type CameraRemovePermInput = {
+  password: string;
+};
+
 export type Camera = {
   _id: string;
   name: string;

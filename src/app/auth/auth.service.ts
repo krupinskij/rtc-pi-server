@@ -11,12 +11,12 @@ const register = async (registerInput: RegisterInput): Promise<Tokens> => {
 
   const isUserFromEmail = await userModel.exists({ email });
   if (isUserFromEmail) {
-    throw new BadRequestException('Użytkownik o takim emailu już istnieje');
+    throw new BadRequestException('exists.user.email');
   }
 
   const isUserFromUsername = await userModel.exists({ username });
   if (isUserFromUsername) {
-    throw new BadRequestException('Użytkownik o takiej nazwie już istnieje');
+    throw new BadRequestException('exists.user.username');
   }
 
   const hashedPassword = await generateHash(password, 10);
@@ -38,12 +38,12 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   const existingUser = await userService.findByEmail(email);
 
   if (!existingUser) {
-    throw new UnauthorizedException('Nieodpowiedni email lub hasło', false);
+    throw new UnauthorizedException('incorrect-email-password', false);
   }
 
   const isUserValid = await validateHash(password, existingUser.password);
   if (!isUserValid) {
-    throw new UnauthorizedException('Nieodpowiedni email lub hasło', false);
+    throw new UnauthorizedException('incorrect-email-password', false);
   }
 
   return {
@@ -55,7 +55,7 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
 
 const refresh = async (user?: User | null): Promise<Tokens> => {
   if (!user) {
-    throw new UnauthorizedException('Wystąpił błąd. Nastąpi wylogowanie...', true);
+    throw new UnauthorizedException('error.logout', true);
   }
 
   return {
