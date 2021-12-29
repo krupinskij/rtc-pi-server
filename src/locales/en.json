@@ -10,8 +10,8 @@
   "incorrect.password": "Password is incorrect",
 
   "error.logout": "Error occured. You'll be signed out...",
+  "error.wrong-format": "Wrong format of input data",
 
-  "exists.user.email": "User with this email already exists",
-
+  "user.exists.email": "User with this email already exists",
   "user.not-logged": "You're logged out"
 }

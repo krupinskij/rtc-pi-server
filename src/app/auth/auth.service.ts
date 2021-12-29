@@ -11,7 +11,7 @@ const register = async (registerInput: RegisterInput): Promise<Tokens> => {
 
   const isUserFromEmail = await userModel.exists({ email });
   if (isUserFromEmail) {
-    throw new BadRequestException('exists.user.email');
+    throw new BadRequestException('user.exists.email');
   }
 
   const hashedPassword = await generateHash(password, 10);

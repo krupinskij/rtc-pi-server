@@ -10,8 +10,8 @@
   "incorrect.password": "Podane hasło nie jest poprawne",
 
   "error.logout": "Wystąpił błąd. Nastąpi wylogowanie...",
+  "error.wrong-format": "Niepoprawny format danych wejściowych",
 
-  "exists.user.email": "Użytkownik o takim emailu już istnieje",
-
+  "user.exists.email": "Użytkownik o takim emailu już istnieje",
   "user.not-logged": "Nie jesteś zalogowany"
 }

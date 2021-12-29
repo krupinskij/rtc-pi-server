@@ -37,5 +37,5 @@ export const generateHash = async (data: string, saltRound: number = 10): Promis
 export const validate = (body: any, validator: ObjectSchema): void => {
   const { error } = validator.validate(body);
 
-  if (!!error) throw new BadRequestException('Niepoprawny format danych wejściowych');
+  if (!!error) throw new BadRequestException('error.wrong-format');
 };
