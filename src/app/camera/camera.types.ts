@@ -26,7 +26,6 @@ export type Camera = {
   code: string;
   password: string;
   owner: User;
-  users: User[];
 };
 
 export type CameraCode = {

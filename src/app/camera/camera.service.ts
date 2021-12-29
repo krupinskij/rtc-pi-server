@@ -21,7 +21,6 @@ const getOwnedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('ownedCameras');
-
   return existingUserWithCameras.ownedCameras.map(mapToDTO);
 };
 
@@ -31,7 +30,6 @@ const getUsedCameras = async (user?: User | null): Promise<CameraDTO[]> => {
   }
 
   const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
-
   return existingUserWithCameras.usedCameras.map(mapToDTO);
 };
 
@@ -67,10 +65,7 @@ const registerCamera = async (
   return { code };
 };
 
-const addCamera = async (
-  addCameraInput: CameraAddInput,
-  user?: User | null
-): Promise<CameraDTO> => {
+const addCamera = async (addCameraInput: CameraAddInput, user?: User | null): Promise<void> => {
   if (!user) {
     throw new UnauthorizedException('user.not-logged', true);
   }
@@ -89,18 +84,23 @@ const addCamera = async (
     throw new BadRequestException('incorrect.code-password');
   }
 
-  const existingCameraWithUsers = await existingCamera.populate('users');
-  const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id == user._id);
+  const existingUserWithCameras = await userModel
+    .findById(user._id)
+    .populate('usedCameras')
+    .populate('ownedCameras');
+  const isCameraUsed = !!existingUserWithCameras.usedCameras.find(
+    (camera) => camera._id == existingCamera._id
+  );
+  const isCameraOwned = !!existingUserWithCameras.ownedCameras.find(
+    (camera) => camera._id == existingCamera._id
+  );
 
-  if (isUserHaveCamera) {
+  if (isCameraUsed || isCameraOwned) {
     throw new BadRequestException('camera.already-have');
   }
 
-  existingCameraWithUsers.users.push(user);
-  await userModel.findByIdAndUpdate(user._id, { $push: { usedCameras: existingCamera._id } });
-  await existingCameraWithUsers.save();
-
-  return mapToDTO(existingCameraWithUsers);
+  existingUserWithCameras.usedCameras.push(existingCamera._id);
+  await existingUserWithCameras.save();
 };
 
 const editCamera = async (id: string, editCameraInput: CameraEditInput, user?: User | null) => {
@@ -142,20 +142,11 @@ const removeCamera = async (id: string, user?: User | null) => {
     throw new BadRequestException('camera.not-exists');
   }
 
-  const existingCameraWithUsers = await existingCamera.populate('users');
-  const isUserHaveCamera = existingCameraWithUsers.users.find((u) => u._id == user._id);
-  if (!isUserHaveCamera) {
-    throw new UnauthorizedException('camera.not-have', false);
-  }
-
   const existingUserWithCameras = await userModel.findById(user._id).populate('usedCameras');
   const isUserUsingCamera = existingUserWithCameras.usedCameras.find((c) => c._id == id);
   if (!isUserUsingCamera) {
     throw new UnauthorizedException('camera.not-have', false);
   }
-
-  existingCameraWithUsers.users = existingCameraWithUsers.users.filter((u) => u._id != user._id);
-  await existingCameraWithUsers.save();
 
   existingUserWithCameras.usedCameras = existingUserWithCameras.usedCameras.filter(
     (c) => c._id != id
@@ -189,10 +180,10 @@ const removePermCamera = async (
     throw new UnauthorizedException('camera.not-owner', false);
   }
 
-  const existingCameraWithUsers = await existingCamera.populate('users');
+  const usersOwnedCamera = await userModel.find({ 'usedCameras._id': existingCamera._id }, '_id');
 
   await userModel.updateMany(
-    { _id: { $in: existingCameraWithUsers.users.map((user) => user._id) } },
+    { _id: { $in: usersOwnedCamera.map((user) => user._id) } },
     { $pull: { ownedCameras: id } }
   );
 
