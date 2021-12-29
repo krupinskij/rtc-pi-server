@@ -10,7 +10,6 @@ export const signAccessToken = (user: User): string => {
   const payload = {
     _id: user._id,
     email: user.email,
-    username: user.username,
   };
 
   return jwt.sign(payload, config.ACCESS_TOKEN_SECRET, { expiresIn: '5m' });

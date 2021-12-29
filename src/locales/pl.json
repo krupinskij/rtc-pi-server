@@ -12,7 +12,6 @@
   "error.logout": "Wystąpił błąd. Nastąpi wylogowanie...",
 
   "exists.user.email": "Użytkownik o takim emailu już istnieje",
-  "exists.user.username": "Użytkownik o takiej nazwie już istnieje",
 
   "user.not-logged": "Nie jesteś zalogowany"
 }

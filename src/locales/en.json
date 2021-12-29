@@ -12,7 +12,6 @@
   "error.logout": "Error occured. You'll be signed out...",
 
   "exists.user.email": "User with this email already exists",
-  "exists.user.username": "User with this username already exists",
 
   "user.not-logged": "You're logged out"
 }
