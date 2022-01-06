@@ -9,6 +9,7 @@
   "incorrect.email-password": "Podany email lub hasło nie jest poprawny",
   "incorrect.password": "Podane hasło nie jest poprawne",
 
+  "error.limit-exceeded": "Zbyt wiele zapytań. Spróbuj ponownie później",
   "error.logout": "Wystąpił błąd. Nastąpi wylogowanie...",
   "error.wrong-format": "Niepoprawny format danych wejściowych",
 

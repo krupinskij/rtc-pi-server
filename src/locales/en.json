@@ -9,6 +9,7 @@
   "incorrect.email-password": "Email or password is incorrect",
   "incorrect.password": "Password is incorrect",
 
+  "error.limit-exceeded": "Too many requests, please try again later.",
   "error.logout": "Error occured. You'll be signed out...",
   "error.wrong-format": "Wrong format of input data",
 
