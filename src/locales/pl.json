@@ -9,10 +9,10 @@
   "incorrect.email-password": "Podany email lub hasło nie jest poprawny",
   "incorrect.password": "Podane hasło nie jest poprawne",
 
+  "error.limit-exceeded": "Zbyt wiele zapytań. Spróbuj ponownie później",
   "error.logout": "Wystąpił błąd. Nastąpi wylogowanie...",
+  "error.wrong-format": "Niepoprawny format danych wejściowych",
 
-  "exists.user.email": "Użytkownik o takim emailu już istnieje",
-  "exists.user.username": "Użytkownik o takiej nazwie już istnieje",
-
+  "user.exists.email": "Użytkownik o takim emailu już istnieje",
   "user.not-logged": "Nie jesteś zalogowany"
 }

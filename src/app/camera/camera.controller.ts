@@ -76,15 +76,15 @@ const registerCamera = async (
   }
 };
 
-const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<CameraDTO>) => {
+const addCamera = async (req: AuthRequest<CameraAddInput>, res: Response<void>) => {
   const cameraAddInput = req.body;
   const user = req.user;
 
   try {
     validate(cameraAddInput, cameraAddValidator);
-    const camera = await cameraService.addCamera(cameraAddInput, user);
+    await cameraService.addCamera(cameraAddInput, user);
 
-    res.send(camera);
+    res.send();
   } catch (error: any) {
     const { message, stack, authRetry } = error;
     if (error instanceof HttpException) {

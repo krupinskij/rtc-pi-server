@@ -7,16 +7,11 @@ import { generateHash, signAccessToken, signRefreshToken, validateHash } from 'u
 import userModel from 'app/user/user.model';
 
 const register = async (registerInput: RegisterInput): Promise<Tokens> => {
-  const { email, password, username } = registerInput;
+  const { email, password } = registerInput;
 
   const isUserFromEmail = await userModel.exists({ email });
   if (isUserFromEmail) {
-    throw new BadRequestException('exists.user.email');
-  }
-
-  const isUserFromUsername = await userModel.exists({ username });
-  if (isUserFromUsername) {
-    throw new BadRequestException('exists.user.username');
+    throw new BadRequestException('user.exists.email');
   }
 
   const hashedPassword = await generateHash(password, 10);
