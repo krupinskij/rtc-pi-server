@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { ObjectSchema } from 'joi';
 
 import { User } from '@app/user/user.types';
