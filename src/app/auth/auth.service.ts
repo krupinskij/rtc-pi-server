@@ -1,10 +1,10 @@
-import { BadRequestException, UnauthorizedException } from 'exception';
+import userModel from '@app/user/user.model';
+import userService from '@app/user/user.service';
+import { User } from '@app/user/user.types';
+import { BadRequestException, UnauthorizedException } from '/exception';
+import { generateHash, signAccessToken, signRefreshToken, validateHash } from '/utils';
 
-import userService from '../user/user.service';
-import { User } from '../user/user.types';
 import { LoginInput, RegisterInput, Tokens } from './auth.types';
-import { generateHash, signAccessToken, signRefreshToken, validateHash } from 'utils';
-import userModel from 'app/user/user.model';
 
 const register = async (registerInput: RegisterInput): Promise<Tokens> => {
   const { email, password } = registerInput;

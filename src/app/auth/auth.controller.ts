@@ -1,6 +1,6 @@
-import HttpException from 'exception/http.exception';
-import { AuthRequest, Request, Response } from 'model';
-import { validate } from 'utils';
+import { HttpException } from '/exception';
+import { AuthRequest, Request, Response } from '/model';
+import { validate } from '/utils';
 
 import authService from './auth.service';
 import { LoginInput, RegisterInput, HeaderTokens } from './auth.types';

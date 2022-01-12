@@ -1,10 +1,10 @@
 import { NextFunction, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import { validateHash } from 'utils';
-import userService from 'app/user/user.service';
-import config from 'config';
-import { AuthRequest, AccessTokenPayload, RefreshTokenPayload } from 'model';
+import userService from '@app/user/user.service';
+import { validateHash } from '/utils';
+import config from '/config';
+import { AuthRequest, AccessTokenPayload, RefreshTokenPayload } from '/model';
 
 export const authenticate = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const accessToken = req.cookies['access-token'];

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+
 import { Camera } from './camera.types';
 
 const cameraSchema = new mongoose.Schema({

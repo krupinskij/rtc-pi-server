@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { rateLimiter } from 'middleware/rateLimiter';
+
+import { rateLimiter } from '/middleware/rateLimiter';
 
 import cameraController from './camera.controller';
 

@@ -1,6 +1,7 @@
-import { HttpException } from 'exception';
-import { AuthRequest, Response } from 'model';
-import { validate } from 'utils';
+import { HttpException } from '/exception';
+import { AuthRequest, Response } from '/model';
+import { validate } from '/utils';
+
 import userService from './user.service';
 import { EditUserInput } from './user.types';
 import { editUserValidator } from './user.validation';

@@ -1,4 +1,4 @@
-import { Camera } from 'app/camera/camera.types';
+import { Camera } from '@app/camera/camera.types';
 
 export type User = {
   readonly _id: string;

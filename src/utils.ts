@@ -1,10 +1,11 @@
-import { User } from 'app/user/user.types';
 import jwt from 'jsonwebtoken';
-import config from 'config';
 import bcrypt from 'bcrypt';
-import { BadRequestException } from 'exception';
-
 import { ObjectSchema } from 'joi';
+
+import { User } from '@app/user/user.types';
+import BadRequestException from '@exception/bad-request.exception';
+
+import config from './config';
 
 export const signAccessToken = (user: User): string => {
   const payload = {

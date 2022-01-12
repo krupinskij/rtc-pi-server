@@ -1,6 +1,7 @@
-import { HttpException } from 'exception';
-import { AuthRequest, Response } from 'model';
-import { validate } from 'utils';
+import { HttpException } from '/exception';
+import { AuthRequest, Response } from '/model';
+import { validate } from '/utils';
+
 import cameraService from './camera.service';
 import {
   CameraRegisterInput,

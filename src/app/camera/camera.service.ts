@@ -1,6 +1,11 @@
-import { User } from 'app/user/user.types';
-import { BadRequestException, UnauthorizedException } from 'exception';
-import { generateHash, validateHash } from 'utils';
+import { customAlphabet } from 'nanoid';
+import { nolookalikes } from 'nanoid-dictionary';
+
+import { User } from '@app/user/user.types';
+import userModel from '@app/user/user.model';
+import { BadRequestException, UnauthorizedException } from '/exception';
+import { generateHash, validateHash } from '/utils';
+
 import cameraModel from './camera.model';
 import {
   CameraAddInput,
@@ -10,9 +15,6 @@ import {
   CameraRegisterInput,
   CameraRemovePermInput,
 } from './camera.types';
-import { customAlphabet } from 'nanoid';
-import { nolookalikes } from 'nanoid-dictionary';
-import userModel from 'app/user/user.model';
 import { mapToDTO } from './camera.utils';
 
 const getOwnedCameras = async (user?: User | null): Promise<CameraDTO[]> => {

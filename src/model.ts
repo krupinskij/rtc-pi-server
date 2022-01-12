@@ -3,7 +3,7 @@ import * as core from 'express-serve-static-core';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 
-import { User } from 'app/user/user.types';
+import { User } from '@app/user/user.types';
 
 export interface AccessTokenPayload extends User, jwt.JwtPayload {}
 

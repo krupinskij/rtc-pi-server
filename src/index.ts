@@ -1,8 +1,9 @@
+import 'ts-path-mapping';
+
 import { json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
-import { authenticate } from 'middleware/authenticate';
 import mongoose from 'mongoose';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
@@ -10,11 +11,13 @@ import i18next from 'i18next';
 import i18nextMiddleware from 'i18next-http-middleware';
 import Backend from 'i18next-fs-backend';
 
-import authRouter from './app/auth/auth.routes';
-import cameraRouter from './app/camera/camera.routes';
-import userRouter from './app/user/user.routes';
+import authRouter from '@app/auth/auth.routes';
+import cameraRouter from '@app/camera/camera.routes';
+import cameraService from '@app/camera/camera.service';
+import userRouter from '@app/user/user.routes';
+import { authenticate } from '@middleware/authenticate';
+
 import config from './config';
-import cameraService from 'app/camera/camera.service';
 
 const CONNECTION_STRING = config.CONNECTION_STRING;
 const PORT = config.PORT;

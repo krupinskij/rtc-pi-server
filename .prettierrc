@@ -3,11 +3,5 @@
   "semi": true,
   "singleQuote": true,
   "tabWidth": 2,
-  "trailingComma": "es5",
-  "importOrder": [
-    "<THIRD_PARTY_MODULES>",
-    "^(config|model|utils)$|^(app|exception|middleware)/?",
-    "^[./]"
-  ],
-  "importOrderSeparation": true
+  "trailingComma": "es5"
 }

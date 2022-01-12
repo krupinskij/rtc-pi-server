@@ -1,4 +1,4 @@
-import { User } from 'app/user/user.types';
+import { User } from '@app/user/user.types';
 
 export type CameraRegisterInput = {
   name: string;

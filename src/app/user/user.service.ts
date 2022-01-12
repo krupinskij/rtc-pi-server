@@ -1,5 +1,6 @@
-import { UnauthorizedException } from 'exception';
-import { generateHash, validateHash } from 'utils';
+import { UnauthorizedException } from '/exception';
+import { generateHash, validateHash } from '/utils';
+
 import userModel from './user.model';
 import { EditUserInput, User, UserToSave } from './user.types';
 
