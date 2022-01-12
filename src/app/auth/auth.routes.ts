@@ -1,12 +1,13 @@
 import { Router } from 'express';
 
 import { authenticate } from 'middleware/authenticate';
+import { rateLimiter } from 'middleware/rateLimiter';
 
 import authController from './auth.controller';
 
 const router = Router();
 
-router.post('/register', authController.register);
+router.post('/register', rateLimiter, authController.register);
 
 router.post('/login', authController.login);
 

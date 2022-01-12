@@ -6,6 +6,9 @@ import { authenticate } from 'middleware/authenticate';
 import mongoose from 'mongoose';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
+import i18next from 'i18next';
+import i18nextMiddleware from 'i18next-http-middleware';
+import Backend from 'i18next-fs-backend';
 
 import authRouter from './app/auth/auth.routes';
 import cameraRouter from './app/camera/camera.routes';
@@ -22,10 +25,22 @@ mongoose
   .then(() => console.log('Connection established succesfully'))
   .catch((err) => console.error(err));
 
+i18next
+  .use(Backend)
+  .use(i18nextMiddleware.LanguageDetector)
+  .init({
+    backend: {
+      loadPath: __dirname + '/locales/{{lng}}.json',
+    },
+    fallbackLng: 'pl',
+    load: 'languageOnly',
+  });
+
 const app = express();
 
 app.use(json());
 app.use(cookieParser());
+app.use(i18nextMiddleware.handle(i18next));
 
 app.use(
   cors({

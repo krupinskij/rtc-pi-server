@@ -1,0 +1,18 @@
+{
+  "camera.already-have": "You already have this camera",
+  "camera.not-exists": "This camera doesn't exist",
+  "camera.not-have": "You don't have this camera",
+  "camera.not-owner": "You're not the owner of this camera",
+
+  "incorrect.code-password": "Code or password is incorrect",
+  "incorrect.camera-password": "Camera doesn't exist or password is incorrect",
+  "incorrect.email-password": "Email or password is incorrect",
+  "incorrect.password": "Password is incorrect",
+
+  "error.limit-exceeded": "Too many requests, please try again later.",
+  "error.logout": "Error occured. You'll be signed out...",
+  "error.wrong-format": "Wrong format of input data",
+
+  "user.exists.email": "User with this email already exists",
+  "user.not-logged": "You're logged out"
+}

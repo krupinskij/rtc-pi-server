@@ -10,7 +10,6 @@ export const signAccessToken = (user: User): string => {
   const payload = {
     _id: user._id,
     email: user.email,
-    username: user.username,
   };
 
   return jwt.sign(payload, config.ACCESS_TOKEN_SECRET, { expiresIn: '5m' });
@@ -38,5 +37,5 @@ export const generateHash = async (data: string, saltRound: number = 10): Promis
 export const validate = (body: any, validator: ObjectSchema): void => {
   const { error } = validator.validate(body);
 
-  if (!!error) throw new BadRequestException('Niepoprawny format danych wejściowych');
+  if (!!error) throw new BadRequestException('error.wrong-format');
 };

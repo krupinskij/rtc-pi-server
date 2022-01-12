@@ -1,0 +1,18 @@
+{
+  "camera.already-have": "Już masz tę kamerę",
+  "camera.not-exists": "Podana kamera nie istnieje",
+  "camera.not-have": "Nie masz tej kamery",
+  "camera.not-owner": "Nie jesteś właścicielem tej kamery",
+
+  "incorrect.code-password": "Podany kod kamery lub hasło nie jest poprawne",
+  "incorrect.camera-password": "Podana kamera nie istnieje lub hasło nie jest poprawne",
+  "incorrect.email-password": "Podany email lub hasło nie jest poprawny",
+  "incorrect.password": "Podane hasło nie jest poprawne",
+
+  "error.limit-exceeded": "Zbyt wiele zapytań. Spróbuj ponownie później",
+  "error.logout": "Wystąpił błąd. Nastąpi wylogowanie...",
+  "error.wrong-format": "Niepoprawny format danych wejściowych",
+
+  "user.exists.email": "Użytkownik o takim emailu już istnieje",
+  "user.not-logged": "Nie jesteś zalogowany"
+}

@@ -4,7 +4,6 @@ import { User } from './user.types';
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,
-  username: String,
   ownedCameras: [
     {
       type: mongoose.Schema.Types.ObjectId,
