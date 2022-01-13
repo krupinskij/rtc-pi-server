@@ -33,12 +33,12 @@ const login = async (loginInput: LoginInput): Promise<Tokens> => {
   const existingUser = await userService.findByEmail(email);
 
   if (!existingUser) {
-    throw new UnauthorizedException('incorrect-email-password', false);
+    throw new UnauthorizedException('incorrect.email-password', false);
   }
 
   const isUserValid = await validateHash(password, existingUser.password);
   if (!isUserValid) {
-    throw new UnauthorizedException('incorrect-email-password', false);
+    throw new UnauthorizedException('incorrect.email-password', false);
   }
 
   return {
