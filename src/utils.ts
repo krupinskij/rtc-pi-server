@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { ObjectSchema } from 'joi';
 import axios from 'axios';
 
