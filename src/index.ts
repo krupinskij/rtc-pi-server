@@ -48,6 +48,7 @@ app.use(i18nextMiddleware.handle(i18next));
 app.use(
   cors({
     origin: ORIGIN,
+    methods: 'GET,PUT,POST,DELETE',
     preflightContinue: true,
     credentials: true,
   })
