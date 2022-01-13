@@ -4,7 +4,9 @@
   "license": "MIT",
   "private": true,
   "engines": { 
-    "node": "16.13.1" 
+    "node": "16.13.1",
+    "yarn": "1.22.5",
+    "npm": "8.1.2"
   },
   "scripts": {
     "prebuild": "rimraf dist",
