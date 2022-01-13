@@ -51,7 +51,7 @@ app.use(
     preflightContinue: true,
     credentials: true,
     allowedHeaders:
-      'X-Csrf-Token, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
+      'X-Csrf-Token, Set-Cookie, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
   })
 );
 
