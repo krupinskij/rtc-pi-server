@@ -50,7 +50,8 @@ app.use(
     origin: ORIGIN,
     preflightContinue: true,
     credentials: true,
-    allowedHeaders: 'X-Csrf-Token',
+    allowedHeaders:
+      'X-Csrf-Token, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
   })
 );
 
