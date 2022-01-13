@@ -16,6 +16,6 @@
       "@locales/*": [ "./src/locales/*" ],
       "@middleware/*": [ "./src/middleware/*" ],
       "/*": [ "./src/*"]
-  }
+    }
   }
 }

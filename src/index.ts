@@ -16,6 +16,7 @@ import cameraRouter from '@app/camera/camera.routes';
 import cameraService from '@app/camera/camera.service';
 import userRouter from '@app/user/user.routes';
 import { authenticate } from '@middleware/authenticate';
+import '/locales';
 
 import config from './config';
 
@@ -37,7 +38,6 @@ i18next
     },
     fallbackLng: 'pl',
     load: 'languageOnly',
-    preload: ['pl', 'en'],
   });
 
 const app = express();
