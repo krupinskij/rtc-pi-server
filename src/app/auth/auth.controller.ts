@@ -24,7 +24,7 @@ const login = async (req: Request<LoginInput>, res: Response<HeaderTokens>) => {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
-        sameSite: false,
+        sameSite: 'none',
       })
       .send({ accessToken, csrfToken });
   } catch (error: any) {
@@ -50,11 +50,13 @@ const register = async (req: Request<RegisterInput>, res: Response<HeaderTokens>
         maxAge: 5 * 60 * 1000,
         httpOnly: true,
         secure: true,
+        sameSite: 'none',
       })
       .cookie('refresh-token', refreshToken, {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
+        sameSite: 'none',
       })
       .send({ accessToken, csrfToken });
   } catch (error: any) {
@@ -79,11 +81,13 @@ const refresh = async (req: AuthRequest, res: Response<HeaderTokens | string>) =
         maxAge: 5 * 60 * 1000,
         httpOnly: true,
         secure: true,
+        sameSite: 'none',
       })
       .cookie('refresh-token', refreshToken, {
         maxAge: 60 * 60 * 1000,
         httpOnly: true,
         secure: true,
+        sameSite: 'none',
       })
       .send({ accessToken, csrfToken });
   } catch (error: any) {
