@@ -37,6 +37,7 @@ i18next
     },
     fallbackLng: 'pl',
     load: 'languageOnly',
+    preload: ['pl', 'en'],
   });
 
 const app = express();

@@ -32,6 +32,7 @@ const login = async (req: Request<LoginInput>, res: Response<HeaderTokens>) => {
     if (error instanceof HttpException) {
       console.log(req.i18n.resolvedLanguage);
       console.log(req.i18n.getResourceBundle('pl', 'translation'));
+      console.log(req.i18n.store);
       res.status(error.httpStatus).send({ message: req.t(message), authRetry });
       return;
     }
