@@ -47,8 +47,9 @@ app.use(i18nextMiddleware.handle(i18next));
 
 app.use(
   cors({
-    origin: '*',
-    credentials: false,
+    origin: ORIGIN,
+    preflightContinue: true,
+    credentials: true,
   })
 );
 
