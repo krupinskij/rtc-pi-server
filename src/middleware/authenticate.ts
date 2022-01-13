@@ -12,6 +12,10 @@ export const authenticate = async (req: AuthRequest, res: Response, next: NextFu
 
   const csrfToken = req.headers['x-csrf-token'] as string;
 
+  console.log('accessToken', accessToken);
+  console.log('refreshToken', refreshToken);
+  console.log('csrfToken', csrfToken);
+
   if (accessToken && refreshToken && csrfToken) {
     try {
       const user = jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET) as AccessTokenPayload;
