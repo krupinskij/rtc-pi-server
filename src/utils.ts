@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { ObjectSchema } from 'joi';
-import axios from 'axios';
 
 import { User } from '@app/user/user.types';
 import BadRequestException from '@exception/bad-request.exception';
@@ -13,8 +12,6 @@ export const signAccessToken = (user: User): string => {
     _id: user._id,
     email: user.email,
   };
-
-  axios.length;
 
   return jwt.sign(payload, config.ACCESS_TOKEN_SECRET, { expiresIn: '5m' });
 };
