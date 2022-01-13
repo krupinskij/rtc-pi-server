@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
-  "engines": { 
+  "engines": {
     "node": "16.13.1",
     "yarn": "1.22.5",
     "npm": "8.1.2"
@@ -36,7 +36,6 @@
     "socket.io": "^4.4.0"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^3.1.1",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.12",
