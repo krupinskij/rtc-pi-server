@@ -16,6 +16,7 @@ import cameraRouter from '@app/camera/camera.routes';
 import cameraService from '@app/camera/camera.service';
 import userRouter from '@app/user/user.routes';
 import { authenticate } from '@middleware/authenticate';
+import '/locales';
 
 import config from './config';
 
@@ -48,7 +49,10 @@ app.use(i18nextMiddleware.handle(i18next));
 app.use(
   cors({
     origin: ORIGIN,
+    preflightContinue: true,
     credentials: true,
+    allowedHeaders:
+      'X-Csrf-Token, Set-Cookie, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
   })
 );
 
